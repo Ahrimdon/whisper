@@ -36,9 +36,16 @@ def setup_whisper():
     subprocess.check_call([os.path.join('venv', 'Scripts', 'python'), 'setup_whisper.py', 'install'])
 
 if __name__ == "__main__":
+    print("Creating virtual environment...")
     create_venv()
+    print("Upgrading pip...")
     update_pip()
+    print("Installing requirements...")
     install_requirements_in_venv()
+    print("Building whisper...")
     build_whisper()
+    print("Setting up whisper...")
     setup_whisper()
+    print("Creating uninstall scripts...")
     create_uninstall_scripts()
+    print("Done. Setup completed successfully.")

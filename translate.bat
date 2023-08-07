@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 set FULLNAME="Translate.wav"
 set LANGUAGE=es

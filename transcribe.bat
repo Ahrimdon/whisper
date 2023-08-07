@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 set FULLNAME="Transcribe.wav"
 set LANGUAGE=en
