@@ -39,6 +39,6 @@ if __name__ == "__main__":
     create_venv()
     update_pip()
     install_requirements_in_venv()
-    build_whisper_whisper()
+    build_whisper()
     setup_whisper()
     create_uninstall_scripts()
