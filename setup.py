@@ -1,43 +1,40 @@
 import os
-import platform
-import sys
+import subprocess
+import venv
 
-import pkg_resources
-from setuptools import find_packages, setup
+def create_venv():
+    venv.create('venv', with_pip=True)
+    # Create activation scripts
+    with open("venv.ps1", "w") as f:
+        f.write("venv\\Scripts\\Activate.ps1")
 
+    with open("venv.bat", "w") as f:
+        f.write("venv\\Scripts\\activate.bat")
 
-def read_version(fname="whisper/version.py"):
-    exec(compile(open(fname, encoding="utf-8").read(), fname, "exec"))
-    return locals()["__version__"]
+def create_uninstall_scripts():
+    # Create uninstall scripts for PowerShell and Batch
+    with open("uninstall.ps1", "w") as f:
+        f.write("Remove-Item -Recurse -Force venv\n")
+        f.write("Remove-Item venv.ps1\n")
+        f.write("Remove-Item venv.bat\n")
 
+    with open("uninstall.bat", "w") as f:
+        f.write("rd /s /q venv\n")
+        f.write("del venv.bat\n")
+        f.write("del venv.ps1\n")
 
-requirements = []
-if sys.platform.startswith("linux") and platform.machine() == "x86_64":
-    requirements.append("triton==2.0.0")
+def update_pip():
+    subprocess.check_call([os.path.join('venv', 'Scripts', 'python'), '-m', 'pip', 'install', '--upgrade', 'pip'])
 
-setup(
-    name="openai-whisper",
-    py_modules=["whisper"],
-    version=read_version(),
-    description="Robust Speech Recognition via Large-Scale Weak Supervision",
-    long_description=open("README.md", encoding="utf-8").read(),
-    long_description_content_type="text/markdown",
-    readme="README.md",
-    python_requires=">=3.8",
-    author="OpenAI",
-    url="https://github.com/openai/whisper",
-    license="MIT",
-    packages=find_packages(exclude=["tests*"]),
-    install_requires=requirements
-    + [
-        str(r)
-        for r in pkg_resources.parse_requirements(
-            open(os.path.join(os.path.dirname(__file__), "requirements.txt"))
-        )
-    ],
-    entry_points={
-        "console_scripts": ["whisper=whisper.transcribe:cli"],
-    },
-    include_package_data=True,
-    extras_require={"dev": ["pytest", "scipy", "black", "flake8", "isort"]},
-)
+def install_requirements_in_venv():
+    subprocess.check_call([os.path.join('venv', 'Scripts', 'pip'), 'install', '-r', 'requirements.txt'])
+
+def setup_whisper():
+    subprocess.check_call([os.path.join('venv', 'Scripts', 'python'), 'setup_whisper.py', 'install'])
+
+if __name__ == "__main__":
+    create_venv()
+    update_pip()
+    install_requirements_in_venv()
+    setup_whisper()
+    create_uninstall_scripts()
