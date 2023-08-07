@@ -29,6 +29,9 @@ def update_pip():
 def install_requirements_in_venv():
     subprocess.check_call([os.path.join('venv', 'Scripts', 'pip'), 'install', '-r', 'requirements.txt'])
 
+def build_whisper():
+    subprocess.check_call([os.path.join('venv', 'Scripts', 'python'), 'setup_whisper.py', 'build'])
+
 def setup_whisper():
     subprocess.check_call([os.path.join('venv', 'Scripts', 'python'), 'setup_whisper.py', 'install'])
 
@@ -36,5 +39,6 @@ if __name__ == "__main__":
     create_venv()
     update_pip()
     install_requirements_in_venv()
+    build_whisper_whisper()
     setup_whisper()
     create_uninstall_scripts()
