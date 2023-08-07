@@ -1,6 +1,6 @@
 @echo on
 
-set FULLNAME=Voice Training.wav
+set FULLNAME="Voice Training.wav"
 
 :: Remove extension from filename
 for %%A in ("%FULLNAME%") do set "FILENAME=%%~nA"
